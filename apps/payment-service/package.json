@@ -5,7 +5,7 @@
     "dev": "tsx --env-file=.env --watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "check-types": "noEmit"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.14",

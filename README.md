@@ -1,53 +1,236 @@
-# Turborepo starter
+# E-Commerce Microservices Platform
 
-This Turborepo starter is maintained by the Turborepo core team.
+A scalable, modern e-commerce platform built with microservices architecture using TypeScript, Next.js, and various backend frameworks. This monorepo leverages Turborepo for efficient build orchestration and pnpm for package management.
 
-## Using this example
+## 🚀 Features
 
-Run the following command:
+- **Microservices Architecture**: Modular services for products, orders, and payments
+- **Modern Frontend**: Next.js 16 with React 19 for the web application
+- **Database Layer**: PostgreSQL with Prisma ORM for type-safe database operations
+- **Shared UI Components**: Reusable React components across applications
+- **Type-Safe Development**: Full TypeScript coverage with strict linting
+- **Fast Builds**: Turborepo-powered build pipeline with caching
+- **Development Tools**: Hot reloading, type checking, and code formatting
 
-```sh
-npx create-turbo@latest
+## 🛠 Tech Stack
+
+### Frontend
+- **Next.js 16** - React framework for the web app
+- **React 19** - UI library
+- **TypeScript** - Type-safe JavaScript
+
+### Backend Services
+- **Product Service**: Express.js with TypeScript
+- **Order Service**: Fastify with TypeScript
+- **Payment Service**: Hono with TypeScript
+
+### Database & ORM
+- **PostgreSQL** - Primary database
+- **Prisma** - ORM with type generation
+
+### Development & Build Tools
+- **Turborepo** - Build system and task orchestration
+- **pnpm** - Package manager with workspaces
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+
+### Shared Packages
+- **@repo/ui** - Shared React components
+- **@repo/db** - Database client and schemas
+- **@repo/eslint-config** - Shared ESLint configuration
+- **@repo/typescript-config** - Shared TypeScript configuration
+
+## 📋 Prerequisites
+
+- **Node.js** >= 18.0.0
+- **pnpm** >= 9.0.0
+- **PostgreSQL** database
+- **Git** for version control
+
+## 🚀 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd ecommerce
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+
+   Create `.env` files in the following directories with required variables:
+
+   - `apps/product-service/.env`
+   - `apps/order-service/.env`
+   - `apps/payment-service/.env`
+   - `packages/productsDatabase/.env`
+
+   Example `.env` for product service:
+   ```env
+   PORT=3001
+   DATABASE_URL="postgresql://username:password@localhost:5432/ecommerce"
+   ```
+
+4. **Set up the database**
+   ```bash
+   # Generate Prisma client
+   pnpm run db:generate
+
+   # Run migrations
+   pnpm run db:migrate
+   ```
+
+## 🏃 Usage
+
+### Development
+
+Start all services in development mode:
+```bash
+pnpm run dev
 ```
 
-## What's inside?
+This will start:
+- Web app on http://localhost:3000
+- Product service on http://localhost:3001
+- Order service on http://localhost:8001
+- Payment service on http://localhost:8002
 
-This Turborepo includes the following packages/apps:
+### Individual Services
 
-### Apps and Packages
+Start specific services:
+```bash
+# Web app only
+cd apps/web && pnpm run dev
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+# Product service only
+cd apps/product-service && pnpm run dev
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+# Order service only
+cd apps/order-service && pnpm run dev
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+# Payment service only
+cd apps/payment-service && pnpm run dev
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+Build all applications and packages:
+```bash
+pnpm run build
 ```
 
-Without global `turbo`, use your package manager:
+### Linting & Type Checking
 
-```sh
-cd my-turborepo
-npx turbo build
+```bash
+# Lint all code
+pnpm run lint
+
+# Check types
+pnpm run check-types
+
+# Format code
+pnpm run format
+```
+
+## 🏗 Architecture Overview
+
+### Services
+
+#### Product Service (Port 3001)
+- **Framework**: Express.js
+- **Purpose**: Manages product catalog and categories
+- **Endpoints**:
+  - `GET /products` - List products
+  - `GET /categories` - List categories
+- **Database**: PostgreSQL via Prisma
+
+#### Order Service (Port 8001)
+- **Framework**: Fastify
+- **Purpose**: Handles order processing and management
+- **Status**: Basic setup (expand as needed)
+
+#### Payment Service (Port 8002)
+- **Framework**: Hono
+- **Purpose**: Manages payment processing
+- **Status**: Basic setup (expand as needed)
+
+#### Web Application (Port 3000)
+- **Framework**: Next.js
+- **Purpose**: Customer-facing e-commerce website
+- **Features**: Product browsing, shopping cart, checkout
+
+### Database Schema
+
+#### Product Model
+- `id`: Primary key
+- `name`: Product name
+- `shortDescription`: Brief description
+- `description`: Full description
+- `price`: Price in cents
+- `sizes`: Array of available sizes
+- `colors`: Array of available colors
+- `images`: JSON array of image URLs
+- `categorySlug`: Foreign key to Category
+- `createdAt`/`updatedAt`: Timestamps
+
+#### Category Model
+- `id`: Primary key
+- `name`: Category name
+- `slug`: Unique URL-friendly identifier
+- `products`: Related products
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `PORT` | Service port (defaults vary by service) | No |
+
+### Database Setup
+
+1. Create a PostgreSQL database
+2. Update `DATABASE_URL` in environment files
+3. Run migrations: `pnpm run db:migrate`
+4. Generate client: `pnpm run db:generate`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes
+4. Run tests and linting: `pnpm run lint && pnpm run check-types`
+5. Commit your changes: `git commit -am 'Add some feature'`
+6. Push to the branch: `git push origin feature/your-feature`
+7. Submit a pull request
+
+### Development Guidelines
+
+- Use TypeScript for all new code
+- Follow ESLint rules
+- Write meaningful commit messages
+- Test your changes before submitting
+- Update documentation as needed
+
+## 📄 License
+
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For questions or issues:
+- Create an issue in the repository
+- Check the documentation in `apps/docs`
+- Review the code comments for implementation details
+
+---
+
+Built with ❤️ using Turborepo and modern web technologies.
 pnpm dlx turbo build
 pnpm exec turbo build
 ```
