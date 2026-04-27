@@ -1,12 +1,19 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { 
+    createCategory, 
+    deleteCategory, 
+    getAllCategories, 
+    updateCategory 
+} from '../controllers/category.controller';
 
 
 const router: Router = Router();
 
-// Define your category routes here
-router.get('/', (req: Request, res: Response) => {
-    res.send('Get all categories');
-});
+
+router.post("/", createCategory);
+router.put("/:id", updateCategory);
+router.delete("/:id", deleteCategory);
+router.get("/", getAllCategories);
 
 
 export default router;
